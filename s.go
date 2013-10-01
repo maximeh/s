@@ -9,7 +9,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-  "runtime"
+	"runtime"
+	"strconv"
 	"strings"
 )
 
@@ -70,12 +71,12 @@ func main() {
 	}
 
 	ip_addr := find_ip()
-	log.Printf("Serving %s at http://%s%s", file_path, ip_addr, port)
-	url := fmt.Sprintf("http://%s%s", ip_addr, port)
-  cmd := exec.Command("xclip", "-i", "-selection", "clipboard")
-  if runtime.GOOS == "darwin" {
-    cmd = exec.Command("pbcopy")
-  }
+	url := fmt.Sprintf("http://%s%s/%s", ip_addr, port, file_name)
+	log.Printf("Serving %s at %s", file_path, url)
+	cmd := exec.Command("xclip", "-i", "-selection", "clipboard")
+	if runtime.GOOS == "darwin" {
+		cmd = exec.Command("pbcopy")
+	}
 	cmd.Stdin = strings.NewReader(url)
 	err = cmd.Run()
 	if err != nil {
