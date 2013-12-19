@@ -74,6 +74,7 @@ func main() {
 	url := fmt.Sprintf("http://%s%s/%s", ip_addr, port, file_name)
 	log.Printf("Serving %s at %s", file_path, url)
 	cmd := exec.Command("xclip", "-i", "-selection", "clipboard")
+	cmd.Env = append(cmd.Env, "DISPLAY=:0")
 	if runtime.GOOS == "darwin" {
 		cmd = exec.Command("pbcopy")
 	}
