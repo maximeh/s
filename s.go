@@ -44,6 +44,7 @@ func find_ip() string {
 
 func main() {
 	port_i := flag.Int("port", 4242, "port number")
+	download_count := flag.Int("count", 1, "download count")
 	flag.Parse()
 	port := fmt.Sprintf(":%d", *port_i)
 
@@ -100,7 +101,11 @@ func main() {
 			s_size := strconv.FormatInt(file_info.Size(), 10)
 			w.Header().Set("Content-Length", s_size)
 			http.ServeFile(w, r, file_path)
-			os.Exit(0)
+			*download_count--
+			if *download_count == 0 {
+				os.Exit(0)
+			}
+			log.Printf("Number of download still possible: %d\n", *download_count)
 		})
 		http.HandleFunc("/", serveFile)
 	}
