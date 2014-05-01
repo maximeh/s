@@ -82,7 +82,7 @@ func main() {
 	cmd.Stdin = strings.NewReader(url)
 	err = cmd.Run()
 	if err != nil {
-		log.Fatal(err)
+		log.Print("Note: The URL could not be copied in your clipboard.")
 	}
 
 	handler := http.FileServer(http.Dir(file_path))
