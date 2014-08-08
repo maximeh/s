@@ -1,8 +1,8 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"github.com/docopt/docopt-go"
 	"log"
 	"net"
 	"net/http"
@@ -43,23 +43,29 @@ func find_ip() string {
 }
 
 func main() {
-	port_i := flag.Int("port", 4242, "port number")
-	download_count := flag.Int("count", 1, "download count")
-	flag.Parse()
-	port := fmt.Sprintf(":%d", *port_i)
+	usage := `
+Usage:
+  s [options] <path>
+  s -h | --help
+  s -v | --version
 
-	args := flag.Args()
-
-	if len(args) == 0 {
-		log.Printf("Nothing to serve.")
-		return
-	} else if len(args) > 1 {
-		log.Printf("We can only serve one element at a time.")
-		return
+Options:
+  -h --help            Show this screen.
+  -v --version         Show version.
+  -c --count=<count>   Port to use [default: 1].
+  -p --port=<port>     Port to use [default: 4242].
+`
+	arguments, _ := docopt.Parse(usage, nil, true, "s 1.0", false)
+	port := fmt.Sprintf(":%s", arguments["--port"])
+	download_count, err := strconv.Atoi(arguments["--count"].(string))
+	if err != nil {
+		// handle error
+		fmt.Println(err)
+		os.Exit(2)
 	}
 
-	file_name := filepath.Base(flag.Args()[0])
-	file_path, err := filepath.Abs(flag.Args()[0])
+	file_name := filepath.Base(arguments["<path>"].(string))
+	file_path, err := filepath.Abs(arguments["<path>"].(string))
 	if err != nil {
 		log.Printf("Error getting absolute path for %s: %v", file_path, err)
 		return
@@ -101,11 +107,11 @@ func main() {
 			s_size := strconv.FormatInt(file_info.Size(), 10)
 			w.Header().Set("Content-Length", s_size)
 			http.ServeFile(w, r, file_path)
-			*download_count--
-			if *download_count == 0 {
+			download_count--
+			if download_count == 0 {
 				os.Exit(0)
 			}
-			log.Printf("Number of download still possible: %d\n", *download_count)
+			log.Printf("Number of download still possible: %d\n", download_count)
 		})
 		http.HandleFunc("/", serveFile)
 	}
