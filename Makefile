@@ -5,8 +5,8 @@ cover = $(COVER)
 .PNONY: all test deps fmt clean check-gopath
 
 all: check-gopath clean fmt deps test
-	@echo "==> Compiling source code."
-	@env GOPATH=$(gopath) go build -v -o ./bin/s ./s
+	@echo "==> Compiling source code (no symbol table nor debug info)."
+	@env GOPATH=$(gopath) go build -ldflags="-s" -v -o ./bin/s ./s
 
 race: check-gopath clean fmt deps test
 	@echo "==> Compiling source code with race detection enabled."
