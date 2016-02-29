@@ -7,7 +7,7 @@ Package docopt parses command-line arguments based on a help message.
 ⚠ Use the alias “docopt-go”:
 	import "github.com/docopt/docopt-go"
 or
-	$ go get github.com/github/docopt-go
+	$ go get github.com/docopt/docopt-go
 */
 package docopt
 
@@ -52,7 +52,7 @@ func Parse(doc string, argv []string, help bool, version string,
 	args, output, err := parse(doc, argv, help, version, optionsFirst)
 	if _, ok := err.(*UserError); ok {
 		// the user gave us bad input
-		fmt.Println(output)
+		fmt.Fprintln(os.Stderr, output)
 		if exitOk {
 			os.Exit(1)
 		}
