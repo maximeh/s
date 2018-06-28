@@ -4,18 +4,19 @@ s
 A pet project to have some fun in Go.
 It's called s because you use it to *s*erve file or directory.
 
-This is a rip off of the idea of [Simon Budig's
-woof](http://www.home.unix-ag.org/simon/woof.html) but with less capability (I
-know...).
+This is a rip off of the idea of [Simon Budig's woof](http://www.home.unix-ag.org/simon/woof.html).
 
-You can serve a file once (and only once currently) or a directory until you
-close the app.
-The only parameter let you change the default port (which is 4242).
+You can serve either:
+   - serve a file (1 or N times; at the end of the count; the app closes)
+   - serve a directory until you close the app. (useful for dev purposes)
 
-You can't setup the IP you want, it will try to find one itself (using some
-stolen method from Woof) and it may not work with IPv6.
+The default port is 4242 (so you don't need special ACL to run it; you can
+change it with '--port'.
 
-#Usage
+It will listen on all your interfaces; so if the IP found is not the one you
+want to use, you can simply change the URL.
+
+#Install
 
 Still here ?  Wow.
 
@@ -23,8 +24,7 @@ Well, if your *REALLY* want to use it, you can do:
 
 ```sh
 go install github.com/maximeh/s
+make
 ```
 
-And that should be it, it should download everything, compile it and install it.
-
-
+And that should be it, it should download and compile everything.
