@@ -6,7 +6,8 @@ cover = $(COVER)
 
 all: check-gopath clean fmt deps test
 	@echo "==> Compiling source code (no symbol table nor debug info)."
-	@env GOPATH=$(gopath) go build -ldflags="-s" -v -o ./bin/s ./s
+	@env GOPATH=$(gopath) go build -ldflags="-s -w" -v -o ./bin/s ./s
+	upx -f --brute ./bin/s
 
 race: check-gopath clean fmt deps test
 	@echo "==> Compiling source code with race detection enabled."
